@@ -21,5 +21,8 @@
     "open": "0.0.5",
     "webpack": "^3.5.4",
     "webpack-dev-middleware": "^1.12.0"
+  },
+  "dependencies": {
+    "helmet": "^3.8.1"
   }
 }
