@@ -1,6 +1,6 @@
 language: node_js
 node_js:
   - "1"
-  
+
  notifications:
     slack: pulzchk:RaF5YeSLH6XreDjBtSubP74H
