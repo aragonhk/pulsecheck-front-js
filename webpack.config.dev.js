@@ -7,7 +7,8 @@ export default {
   entry: [
     'eventsource-polyfill', // ncessary for hot reloading with IE
     'webpack-hot-middleware/client?reload-true', //it reloads the page if hot module reloading fails
-    './src/index'
+    './src/index',
+    'babel-polyfill'
   ],
   //entry: './src/index',
   //
@@ -36,7 +37,13 @@ export default {
       {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader'}, //used by bootstap, recommended settings
       {test: /\.(woff|woff2)$/, loader: 'url-loader?prefix=font/&limit=5000'},
       {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=application/octet-stream'},
-      {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=image/svg+xml'}      
+      {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=image/svg+xml'},
+      {test: /\.(jpe?g|png|gif|svg)$/i,
+        loaders: [
+            'url-loader?limit=5000&name=img/img-[hash:6].[ext]'
+            //'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+            //'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
+        ]}       
     ]
   }
 };

@@ -6,9 +6,11 @@ import config from '../webpack.config.dev';
 
 /*eslint-disable no-console */
 
-const port = 3000;
+const port = 3001;
 const app = express();
 const compiler = webpack(config);
+
+app.use(express.static(path.join(__dirname, '../src/public')));
 
 app.use(require('webpack-dev-middleware')(compiler,{
     noInfo: true,
@@ -18,7 +20,7 @@ app.use(require('webpack-dev-middleware')(compiler,{
 app.use(require('webpack-hot-middleware')(compiler));
 
 //* any requests end up returing below file
-app.get('*', function(req, res){
+app.get('/', function(req, res){
     res.sendFile(path.join(__dirname, '../src/index.html'));
 });
 
