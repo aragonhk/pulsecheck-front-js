@@ -3,10 +3,11 @@ import webpack from 'webpack';
 import path from 'path';
 import open from 'open';
 import config from '../webpack.config.dev';
-
+import api from './api/api';
+//import events from './auth/events';
 /*eslint-disable no-console */
 
-const port = 3001;
+const port = 8080;
 const app = express();
 const compiler = webpack(config);
 
@@ -18,6 +19,10 @@ app.use(require('webpack-dev-middleware')(compiler,{
 }));
 
 app.use(require('webpack-hot-middleware')(compiler));
+
+app.use('/api', api);
+//app.use('/api/events', events);
+
 
 //* any requests end up returing below file
 app.get('/', function(req, res){

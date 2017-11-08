@@ -1,28 +1,17 @@
-/*Styles */
 body {
     font: 14px Montserrat, sans-serif;
-       /* The image used */
-    background-image: url("../../public/images/background.jpg");
-  
-    /* Full height */
-    height: 100%; 
-  
-    /* Center and scale the image nicely */
-    background-position: center center  ;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    z-index: -5000;
 }
    
-   a {
+a {
      color: #00B7FF;
      text-decoration: none;
 }
-   a.inactive1 {
+
+a.inactive1 {
      color: #00B7FF;
      text-decoration: none;
 }
+
 a.inactive2 {
      color: #015E83;
      text-decoration: none;
@@ -72,8 +61,16 @@ a.inactive2 {
      color: #fff !important;
 }
 
-.bg-grey {
-  background-color: #f6f6f6;
+.open .dropdown-toggle {
+  color: #fff ;
+  background-color: rgba(121, 145, 226, 0.83) !important;
+}
+.dropdown-menu li a {
+  color: #4A5FB1 !important;
+}
+.dropdown-menu li a:hover {
+  color: white !important;
+  background-color: #4A5FB1 !important;
 }
 
 #headline  {
@@ -82,36 +79,65 @@ a.inactive2 {
   color: #f5f5f5;
 }
 
-#about {
+#homepage-headlinebody {
+  background-image: url("../../public/images/background.jpg");
+  /* Full height */
+  height: 100%; 
+    
+  /* Center and scale the image nicely */
+  background-position: center center  ;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+#homepage-about {
   padding-top: 20vh;
   padding-bottom: 10vw;
   background-color: rgba(255,255,255, .5); 
   color:black;
 }
 
-#simplify {
+#homepage-simplify {
   padding-top: 20vh;
   padding-bottom: 10vw;
   background-color: rgb(255,255,255); 
   color:black;
 }
 
-#compliance {
+#homepage-compliance {
+  padding-bottom: 10vw;
+  background-color: rgb(255,255,255); 
+  color:black;
+}
+
+#homepage-pricing {
+  padding-top: 20vh;
+  padding-bottom: 10vw;
+  background-color: rgba(255,255,255, .5); 
+  color:black;
+  background-image: url("../../public/images/meeting.jpg");
+  background-position: center center  ;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -5000;
+}
+
+#homepage-contactform {
+  padding-top: 10vh;
   padding-bottom: 5vw;
   background-color: rgb(255,255,255); 
   color:black;
 }
 
-#pricing {
+#messageList {
   padding-top: 20vh;
-  padding-bottom: 10vw;
-  background-color: rgba(255,255,255, .5); 
+  background-color: rgb(255,255,255); 
   color:black;
 }
 
-#contactform {
-  padding-top: 3vh;
-  padding-bottom: 2vw;
+#notFound {
+  margin-top: 40vh;
   background-color: rgb(255,255,255); 
   color:black;
 }
@@ -120,6 +146,12 @@ a.inactive2 {
   border: 1px solid #f6f6f6; 
   border-radius:0;
   transition: box-shadow 0.5s;
+}
+
+.panel-body{
+  height:220px;
+  padding-top:30px;
+  padding-left: 70px;
 }
 
 .panel:hover {
@@ -134,10 +166,176 @@ footer {
 footer i {
   margin-right:10px;
 }
+
 footer a {
   color: #f5f5f5;
 } 
+
 footer a:hover {
   color: #777;
   text-decoration: none;
 }  
+
+#productPage, #aboutPage, #loginPage, #integrationPage, #auditPage {
+  background-color: rgb(255, 255, 255);
+}
+
+/* 
+    SIDE PAGE
+*/
+
+.wrapper {
+  padding-top: 50px;
+  display: flex;
+  /*align-items: stretch;*/
+}
+
+#sidebar {
+  min-width: 140px;
+  max-width: 140px;
+  height: 100vh;
+}
+
+#sidebar.active {
+  margin-left: -250px;
+}
+
+@media (max-width: 768px) {
+  #sidebar {
+      margin-left: -250px;
+  }
+  #sidebar.active {
+      margin-left: 0;
+  }
+}
+/*
+  ADDITIONAL DEMO STYLE, NOT IMPORTANT TO MAKE THINGS WORK BUT TO MAKE IT A BIT NICER :)
+*/
+
+a, a:hover, a:focus {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+#sidebar {
+  /* don't forget to add all the previously mentioned styles here too */
+  background: #6d7fcc;
+  color: #fff;
+  transition: all 0.3s;
+}
+
+#sidebar .sidebar-header {
+  padding: 20px;
+  background: #6d7fcc;
+}
+
+#sidebar ul p {
+  color: #fff;
+  padding: 10px;
+}
+
+#sidebar ul li a {
+  padding: 10px;
+  font-size: 1.1em;
+  display: block;
+}
+#sidebar ul li a:hover {
+  color: #7386D5;
+  background: #fff;
+}
+
+#content {
+ /* min-height: 200vh;*/
+  transition: all 0.3s;
+  flex:1;
+}
+
+#warning {
+  color:Tomato;
+}
+
+/*
+* USER PAGES 
+*/
+#chart {
+  position: relative;
+  height: 40vh; 
+  width: 80vw;
+}
+
+#dashboardPage {
+  background-color: rgb(255, 255, 255);
+  margin-top: 80px;
+}
+
+#employeeTable table {
+  width: 60vw
+}
+
+#employeeTable table td {
+  max-width: 10px;
+  min-width: 10px
+}
+
+#employeePage {
+  margin: 50px;
+  background-color: rgb(255, 255, 255);
+}
+#auditPage {
+  margin: 50px;
+  background-color: rgb(255, 255, 255);
+}
+
+#settingsPage {
+  margin: 100px;
+  background-color: rgb(255, 255, 255);
+}
+
+/*
+* IntegrationPage
+*/
+
+/* Style the tab */
+div.tabs {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #97AFFC;
+}
+
+div.tabsContent{
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #A7F1B3;
+}
+
+
+
+/* Style the buttons inside the tab */
+div.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+div.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+div.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}

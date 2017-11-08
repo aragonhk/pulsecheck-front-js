@@ -1,70 +1,75 @@
 import React from 'react';
 import Redirect from 'react-router';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom';
+import { HashRouter as Router, Route, Link } from 'react-router-dom';
 import dashboardPage from '../dashboard/DashboardPage';
 import employeePage from '../employee/EmployeePage';
 import auditreportPage from '../audit/AuditPage';
 import integrationPage from '../integration/IntegrationPage';
+import blankPage from '../../utils/blank';
+import csvimportPage from '../integration/CSVImportPage';
+import ManualSearchPage from '../integration/ManualSearchPage';
+import mockdataPage from '../mockdata/mockdataPage';
 
-
-// Each logical "route" has two components, one for
-// the sidebar and one for the main area. We want to
-// render both of them in different places when the
-// path matches the current URL.
 const routes = [
-  { path: '/dashboard',
+  { path: '/user/dashboard',
     exact: true,
     main: dashboardPage
   },
-  { path: '/employee',
+  { path: '/user/employee',
+    exact: true,
     main: employeePage
   },
-  { path: '/audit',
-  main: auditreportPage
+  { path: '/user/audit',
+    exact: true,  
+    main: auditreportPage
   },
-  { path: '/integration',
-  main: integrationPage
+  { path: '/user/integration',
+    exact: true,
+    main: blankPage
+  },
+  { path: '/user/integration/csvimport',
+  exact: true,
+  main: csvimportPage
+  },
+  { path: '/user/integration/manualsearch',
+  exact: true,
+  main: ManualSearchPage
+  },
+  { path: '/user/mockdata',
+  exact: true,
+  main: mockdataPage
   }
 ];
 
-const SidePage = () => (
-  <Router>
-    <div style={{ display: 'flex' }}>
-      <div style={{
-        padding: '10px',
-        width: 250,
-        marginTop:100
-      }}>
-        <ul style={{ listStyleType: 'none', marginTop:1  }}>
-          <li><Link to="/dashboard">Dashboard</Link></li>
-          <li><Link to="/employee">Employee</Link></li>
-          <li><Link to="/audit">Audit Report</Link></li>
-          <li><Link to="/integration">Integration</Link></li>
-        </ul>
-      </div>
+const SidePage = () => (  
+    <div className="wrapper">
+        <nav id="sidebar">
+            <div className="sidebar-header text-center">
+                <h3/>
+            </div>
 
-      <div style={{ 
-        flex: 1,
-        marginTop:10,
-        marginLeft:50 
-      }}>
-        {routes.map((route, index) => (
-          // Render more <Route>s with the same paths as
-          // above, but different components this time.
-          <Route
-            key={index}
-            path={route.path}
-            exact={route.exact}
-            component={route.main}
-          />
-        ))}
-      </div>
+            <ul className="list-unstyled components">
+                <li> <Link to="/user/dashboard" replace>Dashboard</Link> </li>
+                <li> <Link to="/user/employee" replace>Employees</Link> </li>
+                <li> <Link to="/user/audit" replace>Audit Report</Link> </li>
+                <li> <Link to="/user/integration" replace>Integration</Link> </li>
+                <li> <Link to="/user/integration/manualsearch" replace>Manual Search</Link> </li>
+                <li> <Link to="/user/integration/csvimport" replace>csv import</Link> </li>
+                <li> <Link to="/user/mockdata" replace>Mock Data</Link> </li>
+            </ul>
+        </nav>
+        <div id="content">
+          
+          {routes.map((route, index) => (
+            <Route
+                key={index}
+                path={route.path}
+                exact={route.exact}
+                component={route.main}
+            />
+          ))}
+        </div>
     </div>
-  </Router>
 );
 
 export default SidePage;
