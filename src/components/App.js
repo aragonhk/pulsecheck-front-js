@@ -4,11 +4,14 @@ import {HashRouter as Router } from 'react-router-dom';
 import Routes from './Routes';
 import Header from './common/Header';
 import SidePage from './common/SidePage';
+import createMemoryHistory  from 'history/createMemoryHistory';
+
+const history = createMemoryHistory();
 
 class App extends React.Component {
     render(){
         return (
-            <Router>
+            <Router history={history}>
                 <div>
                     <Header />
                     <Routes />

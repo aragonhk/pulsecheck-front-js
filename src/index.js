@@ -9,14 +9,12 @@ import App from './components/App';
 import setAuthToken from './utils/setAuthToken';
 import jwtDecode from 'jwt-decode';
 import { setCurrentUser } from './actions/authActions';
-import { loadEmployees } from './actions/employeeActions';
 import '../node_modules/toastr/build/toastr.min.css';
 import 'react-widgets/dist/css/react-widgets.css';
 
-
 const store = configureStore();
 
-//store.dispatch(loadEmployees());
+//store.dispatch(loadAllEmployees());
 
 if (localStorage.jwtToken){
     setAuthToken(localStorage.jwtToken);

@@ -1,6 +1,7 @@
 import React from 'react';
 import toastr from 'toastr';
 import { TOASTR_OPTIONS } from '../../utils/toastr';
+import { withRouter } from 'react-router';
 
 class AuditPage extends React.Component {
     constructor(props){
@@ -26,12 +27,7 @@ class AuditPage extends React.Component {
         event.preventDefault();
 
         toastr.info('API not ready yet');
-      /*  console.log("Monitor: "+ this.state.monitor +
-        " Exception: "+ this.state.exception +
-        " Monthly report: " + this.state.monthlyReport+
-        " quartly report: " + this.state.quartelyReport+
-        " Annual report: "+this.state.annualReport);
-        */
+  
     }
 
 

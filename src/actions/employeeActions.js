@@ -1,25 +1,32 @@
 import axios from 'axios';
 import * as types from './types';
-import apiTest from '../api/mockCourseApi';
-import { API_GET_ALL_EMPLOYEES, APITest } from '../api/apiSource';
+import { API_SEARCH_EMPLOYEE_STATUS } from '../api/apiSource';
 
-export function loadEmployees2() {
-    return function(dispatch) { //inside thunk
-        return apiTest.getAllCourses().then(employees => {
-            dispatch(loadEmployeeSuccess(employees));
-        }).catch(error => {
-            throw(error);
-        });
+export function loadEmployee(inputFirstName, inputMiddleName, inputLastName, inputSelectedDOB) {
+    let data = {
+        "firstname": inputFirstName,
+        "middlename": inputMiddleName,
+        "lastname": inputLastName,
+        "dateofbirth": inputSelectedDOB,
+        "type": 1
     };
-}
-export function loadEmployees() {
+    let testdata = {
+        "firstname": "James",
+        "middlename": "R",
+        "lastname": "hawkins",
+        "dateofbirth": "1952-11-01",
+        "type": 1
+    };
     return function(dispatch) { //inside thunk
-        return axios
-            .get(API_GET_ALL_EMPLOYEES, '')
+        return axios({
+                method:'post',
+                url: API_SEARCH_EMPLOYEE_STATUS,
+                headers: { 'Content-Type': 'application/json' },
+                data: data
+            })
             .then( res => { 
-                //console.log(res);
                 if (res.data.statuscode == '200'){
-                    //console.log(res.data.response);
+                   // console.log("employeeActions"+res.data.response);
                     dispatch(loadEmployeeSuccess(res.data.response));
                 } 
             })
@@ -29,6 +36,17 @@ export function loadEmployees() {
     };
 }
 
-export function loadEmployeeSuccess(employees){
-    return {type: types.LOAD_EMPLOYEES_SUCCESS, employees};
+export function loadEmployeeSuccess(employee){
+    return {type: types.LOAD_EMPLOYEE_SUCCESS, employee};
 }
+
+export function clearEmployeeState() {
+    return function(dispatch) { //inside thunk
+        dispatch(clearEmployeeStateSuccess());
+    };
+}
+
+export function clearEmployeeStateSuccess(){
+    return {type: types.CLEAR_EMPLOYEE_STATE};
+}
+

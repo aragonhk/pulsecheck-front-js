@@ -7,6 +7,7 @@ export default function(ComposedComponent) {
     class Authenticate extends React.Component {
         constructor(props){
             super(props);
+            this.isAuthenticated = false;
         }
 
         componentWillMount() {
@@ -14,11 +15,19 @@ export default function(ComposedComponent) {
             let expDate = new Date(1000*this.props.user["exp"]).toLocaleString();
            
             console.log("exp: "+ expDate );
+            console.log("currentdate: "+ currentdate);
+            console.log("date > exp: ");
+            console.log(Date.parse(currentdate) > Date.parse(expDate));
+            //console.log(this.props);
 
-            if(!this.props.isAuthenticated || ( currentdate > expDate )){
+            if(!this.props.isAuthenticated || Date.parse(currentdate) > Date.parse(expDate) ){
+                this.isAuthenticated = false;
                 this.props.logout();
                 this.context.router.history.push('/login');
             }
+            else 
+                this.isAuthenticated = true;
+          
         }
 
         componentWillUpdate(nextProps){
@@ -28,9 +37,15 @@ export default function(ComposedComponent) {
         }
 
         render() {
-            return (
-                <ComposedComponent {...this.props} />
-            );
+            if(this.isAuthenticated){
+                return (
+                    <ComposedComponent {...this.props} />
+                );
+            }
+            else
+                return (
+                    <div/>
+                );
         }
     }
 

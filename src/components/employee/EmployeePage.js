@@ -4,74 +4,73 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import * as employeeActions from '../../actions/employeeActions';
 import DropdownList from 'react-widgets/lib/DropdownList';
-import { EmployeeTable, SearchBar } from './EmployeeTable';
+import EmployeeTable from './EmployeeTable';
 import FileSaver from 'file-saver';
 import toastr from 'toastr';
 import { TOASTR_OPTIONS } from '../../utils/toastr';
+import Pagination from "react-js-pagination";
+import { isEmpty } from 'lodash';
+import convertToCSV from '../../utils/convertToCSV';
 
-//import Globalize from 'globalize';
-//import globalizeLocalizer from 'react-widgets-globalize';
-//import DateTimePicker from 'react-widgets/lib/DateTimePicker';
-//import { DateTimePicker } from 'react-widgets';
-
-
-function convertToCSV(objArray) {
-    const fields = ["firstname","middlename","lastname","dateofbirth","type"];
-    
-    let array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-    let str = '';
-    for ( let i=0 ; i < fields.length-1 ; i++ )
-        str += fields[i] + ',';
-    str += fields[fields.length-1] + '\r\n';
-
-    for (let i = 0; i < array.length; i++) {
-        let line = '';
-        for (let index in array[i]) {
-            if (array[i].hasOwnProperty(index)) {  // or if (Object.prototype.hasOwnProperty.call(obj,prop)) for safety
-                if (fields.includes(index)) {
-                    line += array[i][index];
-                    if (line != '') 
-                        line += ',';
-                }
-            }
-        }
-        str += line.replace(/,\s*$/, "") + '\r\n';
-    }
-    return str;
-}
 
 class EmployeePage extends React.Component {
     constructor(props){
         super(props);
         toastr.options = TOASTR_OPTIONS;
         this.state = {
-            filterText: ''
+            filterText: '',
+            itemsPerPage: 10,
+            activePage: 1,
+            dropdownlistDisabled: false,
         }; 
+
+        this.filterValues = ['10', '50', '100'];
+        
         this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
         this.exportCSVSubmit = this.exportCSVSubmit.bind(this);
+        this.handlePageClick = this.handlePageClick.bind(this);
+        this.clearTextbox = this.clearTextbox.bind(this);
+        this.handleDropDownListChange = this.handleDropDownListChange.bind(this);
+
+        if(this.props.allEmployees.length <= 10)
+            this.filterValues= ['10']; 
+        else if(this.props.allEmployees.length > 10 && this.props.allEmployees.length <= 50 )
+            this.filterValues= ['10', '50'];
+        else if(this.props.allEmployees.length > 50 && this.props.allEmployees.length <= 100 ) 
+            this.filterValues=['10', '50'];
+        else 
+             this.filterValues= ['10', '50', '100'];
     }
 
-    componentDidMount(){
-       /* this.props.actions.loadEmployees()
-        .then( res => {})
-        .catch(error => { toastr.error('Error getting data'); });*/
+    handleFilterTextChange(event) {
+        this.setState({ filterText: event.target.value });
     }
 
-    handleFilterTextChange(filterText) {
-        this.setState({
-          filterText: filterText
-        });
-      }
-
-    onChangeView(event){
-        event.preventDefault();
-    }
     exportCSVSubmit(){
-        let blob = new Blob([convertToCSV(this.props.employees)], {type: "text/plain;charset=utf-8"});
-        FileSaver.saveAs(blob, "csv.txt");
+        console.log(this.props.allEmployees);
+        const fields = ["firstname","middlename","lastname","dateofbirth","type"];
+        
+        let blob = new Blob([convertToCSV(fields, this.props.allEmployees)], {type: "text/plain;charset=utf-8"});
+        FileSaver.saveAs(blob, "employeesdata.csv");
         toastr.success('Successfully exported CSV');
     }
 
+    handlePageClick(pageNumber){
+        //console.log("pageNumber: "+ pageNumber);
+        this.setState({ activePage: pageNumber });
+    }
+
+    handleDropDownListChange(value){
+        this.setState({ 
+            itemsPerPage: parseInt(value),
+            activePage: 1
+         });
+    }
+
+    clearTextbox(){
+        this.setState({filterText: "" });
+    }
+  
     render(){
         return (
             <div id="employeePage">
@@ -81,40 +80,72 @@ class EmployeePage extends React.Component {
                         <li>Home</li>
                         <li>Operations center (20)</li>
                         <li>Provider (5000)</li>
-                        <li className="active">Drivers ({ this.props.employees.length })</li>
+                        <li className="active">Drivers ({ this.props.allEmployees.length })</li>
                     </ol>
                 </div>
             
                 <div className="row">
-                    <form className="form-inline">
+                    <div className="col-sm-5">
+                    <div className="form-group">
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            className="form-control"
+                            value={this.state.filterText}
+                            onChange={this.handleFilterTextChange}
+                        />
+                    </div>
+
+                    </div>
+                    <div className="col-sm-1 text-left">
                         <div className="form-group">
-                            <SearchBar 
-                                onFilterTextChange={this.handleFilterTextChange} 
-                            />
+                            <button className="btn btn-default" type="submit" onClick={this.clearTextbox}>Clear</button> 
                         </div>
-                        <div className="dropdown form-group">
-                       
-                            <button className="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" disabled>Dropdown 
-                                <span className="caret"/>
-                            </button>
-                            <ul className="dropdown-menu">
-                                <li><a href="#" onClick={this.onChangeView}>item 1</a></li>
-                                <li><a href="#" onClick={this.onChangeView}>item 2</a></li>
-                                <li><a href="#" onClick={this.onChangeView}>item 3</a></li>
-                            </ul>
+                    </div>
+                    <div className="col-sm-4 text-left">
+                        <div className="form-group">
+                            <button className="btn btn-default" type="submit" onClick={this.exportCSVSubmit}>Export CSV</button>
                         </div>
-                    </form>
+                    </div>
+                    <div className="col-sm-2">
+                    <div className="form-group">
+                        <DropdownList
+                            disabled={this.state.dropdownlistDisabled}
+                            data={this.filterValues}
+                            defaultValue={this.state.itemsPerPage}
+                            value={this.state.itemsPerPage}
+                            onChange={this.handleDropDownListChange}
+                        />  
+                        </div>
+                    </div>
                 </div>
                
                 <div className="row">
                     <br/>
                     <EmployeeTable 
-                        employeeData={this.props.employees} 
+                        employeeData={this.props.allEmployees} 
                         filterText={this.state.filterText}
+                        itemsPerPage={this.state.itemsPerPage}
+                        activePage={this.state.activePage}
                     />
                 </div>
-                <div className="row text-right">
-                    <button className="btn btn-default" type="submit" onClick={this.exportCSVSubmit}>Export CSV</button>
+                <div className="row">
+                    <div className="col-sm-3"/>
+                    <div className="col-sm-6 text-center">
+                        { isEmpty(this.state.filterText) &&
+                            <Pagination 
+                                activePage={this.state.activePage} 
+                                itemsCountPerPage={this.state.itemsPerPage} 
+                                totalItemsCount={this.props.allEmployees.length} 
+                                pageRangeDisplayed={3} 
+                                onChange={this.handlePageClick} 
+                            />
+                        }
+                    </div>
+                    <div className="col-sm-3 text-right">
+                        <br/>
+                       
+                    </div>
                 </div>
             </div>
         </div>
@@ -122,24 +153,14 @@ class EmployeePage extends React.Component {
     }
 }
 
-
-EmployeeTable.propTypes = {
-     employeeData: PropTypes.array.isRequired,
-     filterText: PropTypes.string
-};
-SearchBar.propTypes = {
-    filterText: PropTypes.string,
-    onFilterTextChange: PropTypes.func
-};
-
 EmployeePage.propTypes = {
-    employees: PropTypes.array.isRequired,
+    allEmployees: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired
 };
 
 function mapStateToProps (state, ownProps){
     return {
-        employees: state.employees
+        allEmployees: state.allEmployees.employees
     };
 }
 

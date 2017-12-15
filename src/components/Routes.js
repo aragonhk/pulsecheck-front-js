@@ -21,9 +21,7 @@ const Routes = () => {
             <Route path="/user/employee" component={Authenticate(SidePage)} />
             <Route path="/user/audit" component={Authenticate(SidePage)} />
             <Route path="/user/integration" component={Authenticate(SidePage)} />
-            <Route path="/user/integration/csvimport" component={Authenticate(SidePage)} />
             <Route path="/user/settings" component={Authenticate(Settings)}  />
-            <Route path="/user/mockdata" component={Authenticate(SidePage)}  />
             <Route exact path="/" component={HomePage} />
             <Route path="*" component={NotFoundPage}/>
         </Switch>

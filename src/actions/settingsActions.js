@@ -1,6 +1,5 @@
 import axios from 'axios';
 import * as types from './types';
-import apiTest from '../api/mockCourseApi';
 import { API_GET_USER_SETTINGS } from '../api/apiSource';
 
 

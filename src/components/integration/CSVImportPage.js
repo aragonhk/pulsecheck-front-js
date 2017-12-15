@@ -37,7 +37,6 @@ class CSVImportPage extends React.Component {
         this.handleFiles = this.handleFiles.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.resetForm = this.resetForm.bind(this);
-        this.getData = this.getData.bind(this);
     }
 
     resetForm() {
@@ -45,12 +44,6 @@ class CSVImportPage extends React.Component {
         this.setState ({ 
             fileName: '', 
             disableUpload: true });
-    }
-
-    getData(){
-        console.log(this.state.fileName);
-        console.log(this.data);
-        console.log(this.state.disableUpload);
     }
 
     handleFiles(files){
@@ -76,40 +69,40 @@ class CSVImportPage extends React.Component {
 
     onSubmit(event){
         event.preventDefault();
-        //console.log("JSON: " + this.data);
+        toastr.info("Importing please wait");
         
         API.importCSV(this.data)
-            .then( res => toastr.success('Successfully importing data'))
+            .then( res => toastr.success('Data Successfully imported'))
             .catch( error => toastr.error('Error importing data'));
         this.resetForm();
     }
     
     render() {
         return (
-            <div id="productPage" className="jumbotron">
+            <div id="csvimportpage" className="jumbotron">
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-3"/>
-                        <div className="col-sm-6">  
+                        <div className="col-sm-4">  
                             Select a csv file to import.<br/><br/>
                         </div>
                         <div className="col-sm-3"/>
                     </div>
+                   
                     <div className="row">
                         <div className="col-sm-3"/>
-                        <div className="col-sm-6">  
+                        <div className="col-sm-4">  
                             <form name="csvimport" className="form-inline" >
-                                <div className="form-group">
-                                    <input type="text" className="form-control" id="" placeholder={this.state.fileName} disabled/>
-                                </div>
-                                <div className="form-group">
-                                    <ReactFileReader handleFiles={this.handleFiles} fileTypes={'.csv'} multipleFiles={false} base64={false}>
-                                        <button className="btn btn-default">Browse</button>
-                                    </ReactFileReader>
-                                </div>
-                                
-                                <button type="submit" className="btn btn-default" onClick={this.onSubmit} disabled={this.state.disableUpload} >Import</button>
-                            
+                                    <div className="form-group">
+                                        <input type="text" className="form-control" id="" placeholder={this.state.fileName} disabled/>
+                                    </div>
+                                    <div className="form-group">
+                                        <ReactFileReader handleFiles={this.handleFiles} fileTypes={'.csv'} multipleFiles={false} base64={false}>
+                                            <button className="btn btn-default">Browse</button>
+                                        </ReactFileReader>
+                                    </div>
+                                    
+                                    <button type="submit" className="btn btn-default" onClick={this.onSubmit} disabled={this.state.disableUpload} >Import</button>
                             </form>
                         </div>
                         <div className="col-sm-3"/>

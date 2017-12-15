@@ -8,15 +8,16 @@ import moment from 'moment';
 import FileSaver from 'file-saver';
 import toastr from 'toastr';
 import { TOASTR_OPTIONS } from '../../utils/toastr';
+import faker from 'faker';
 
 const shortDate = (csv) =>{
     let lines=csv.split("\n");
     let result = "";
-    result += (lines[0] + "\r\n");
+    result += (lines[0] + "\r\n");    
 
     for(let i=1;i<lines.length;i++){
         let fields=lines[i].split(",");
-        result += (fields[0] + "," + fields[1]+ "," +fields[2] + "," + moment(fields[3]).format('YYYY-MM-DD') + "," + fields[4]);
+        result += (fields[0] + "," + fields[1]+ "," +fields[2] + "," + moment(faker.date.between('1940-01-01', '2000-12-31')).format('YYYY-MM-DD') + "," + fields[4]);
         if(lines[i] != lines[lines.length-1])
             result += "\r\n";
     }
@@ -73,22 +74,28 @@ class mockdataPage extends React.Component {
 
     render(){
         return (
-            <div id="productPage">
+            <div id="mockdatapage" className="jumbotron">
                 <div className="container">
                     <div className="row">
-                        Generate mockdata in CSV format and import into the employee table.<br/><br/>
+                        <div className="col-sm-3"/>
+                        <div className="col-sm-9 text-left">  
+                            Generate mockdata in CSV format and import into the employee table.<br/><br/>
+                        </div>
                     </div>
+                    
                     <div className="row">
+                        <div className="col-sm-3"/>
+                        <div className="col-sm-9 text-left"> 
                             <form name="csvimport" className="form-inline" >
-                                <label>Number of employees to generate: </label>
-                                <input type="text" name="min" placeholder='2' onChange={this.onChangeValue} size="10"/>
+                                <label>Number of employees to generate: </label> 
+                                <input type="text" name="min" placeholder="2" onChange={this.onChangeValue} size="10"/>
                                 <button type="submit" className="btn btn-default" onClick={this.onSubmit}>Generate mockdata</button>
-
                             </form>  
                             <MockData mockData={this.state.mockData}/>
+                        </div>
                     </div>
                 </div>
-            </div>
+                </div>
         );
     }
 }

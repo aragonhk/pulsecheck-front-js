@@ -1,35 +1,37 @@
 import React from 'react';  
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as employeeActions from '../../actions/employeeActions';
+import * as allEmployeeActions from '../../actions/allEmployeeActions';
 import PropTypes from 'prop-types';
-import { FAKEEMPLOYEEDATA } from '../../api/fakeData';
 import { Bar, Pie } from 'react-chartjs-2';
 import { ChartsTable, PieTable } from './charts';
-import { EmployeeTable } from '../employee/EmployeeTable';
+import EmployeeTable from '../employee/EmployeeTable';
 import toastr from 'toastr';
 import { TOASTR_OPTIONS } from '../../utils/toastr';
-
+import { isEmpty } from 'lodash';
 
 class Dashboard extends React.Component {
   constructor(props){
       super(props);
       this.state= {
-            filterText: ''
+            filterText: '',
+            itemsPerPage: 10,
+            activePage:1
         }; 
         this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
-     // this.setState ({ length: FAKEEMPLOYEEDATA.length } );
   }
 
     componentDidMount(){
-        this.props.actions.loadEmployees()
-        .then( res => {})
-        .catch(error => { toastr.error('Error getting data'); });
+      //  console.log("isEmpty: " +isEmpty(this.props.allEmployees));
+        //if(isEmpty(this.props.allEmployees)) { 
+            this.props.actions.loadAllEmployees()
+            .then( res => { })
+            .catch(error => { toastr.error('Error getting data'); });
+        //}
     }
+
     handleFilterTextChange(filterText) {
-        this.setState({
-        filterText: filterText
-        });
+        this.setState({ filterText: filterText });
     }
 
   render() {
@@ -37,7 +39,7 @@ class Dashboard extends React.Component {
             <div id="dashboardPage">
                 <div className="container">
                     <div className="row" >
-                        <h5>Currently { this.props.employees.length } employees with active monitoring.</h5>
+                        <h5>Currently { this.props.allEmployees.length } employees with active monitoring.</h5>
                         <br/><br/>
                         <br/>
                     </div>
@@ -56,8 +58,10 @@ class Dashboard extends React.Component {
                     <div className="row">
                         <br/><br/><br/>
                         <EmployeeTable 
-                            employeeData={this.props.employees} 
+                            employeeData={this.props.allEmployees} 
                             filterText={this.state.filterText}
+                            itemsPerPage={this.state.itemsPerPage}
+                            activePage={this.state.activePage}
                         />
                     </div>
                 </div>
@@ -71,19 +75,20 @@ EmployeeTable.propTypes = {
 };
 
 Dashboard.propTypes = {
-    employees: PropTypes.array.isRequired,
+    allEmployees: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired
 };
 
 function mapStateToProps (state, ownProps){
     return {
-        employees: state.employees
+        allEmployees: state.allEmployees.employees,
+        sortBy: state.sortBy
     };
 }
 
 function mapDispatchToProps(dispatch){
     return {
-        actions: bindActionCreators(employeeActions, dispatch)
+        actions: bindActionCreators(allEmployeeActions, dispatch)
     };
 }
 

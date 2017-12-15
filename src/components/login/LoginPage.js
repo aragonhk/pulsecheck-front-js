@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as loginActions from '../../actions/authActions'; 
+import { loadAllEmployees } from '../../actions/allEmployeeActions';
 import PropTypes from 'prop-types';
 import validateInput from './validations';
 import toastr from 'toastr';
@@ -64,11 +65,8 @@ class LoginPage extends Component {
             this.setState( { errors: '', isLoading: true });
             this.props.actions.loginAxios(this.state)
                 .then( res => {
-                    this.context.router.history.push('/user/dashboard');}
-                    //(error) => { this.setState({ errors: 'Invalid login credentials'  , isLoading: false });
-                    //console.log("error.response.data: " + error.response.data.statuscode);
-                    //console.log("ERRstatustext: " + JSON.stringify(error.response.data));
-                )
+                    this.context.router.history.push('/user/dashboard');
+                })
                 .catch( error => {
                     toastr.error('Invalid credentials');
                     this.setState({ isLoading: false});
